@@ -5,13 +5,14 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta property="og:title" content="00만의 셀렉샵">
-    <meta property="og:description" content="관심상품을 선택하고, 최저가 알림을 확인해보세요!">
-    <meta property="og:image" content="images/og_selectshop.png">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css"/>
+
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/basic.js"></script>
     <title>나만의 셀렉샵</title>
 </head>
@@ -38,6 +39,18 @@
     </div>
 </div>
 <div id="see-area">
+    <div class="pagination">
+        정렬:
+        <select id="sorting" onchange="showProduct()">
+            <option value="id">ID</option>
+            <option value="title">상품명</option>
+            <option value="lprice">최저가</option>
+        </select>
+        <input type="radio" name="isAsc" value="true" onchange="showProduct()" checked/> 오름차순
+        <input type="radio" name="isAsc" value="false" onchange="showProduct()"/> 내림차순
+    </div>
+    <div id="pagination" class="pagination"></div>
+    <br>
     <div id="product-container">
 
     </div>
