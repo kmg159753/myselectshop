@@ -2,8 +2,42 @@ const host = 'http://' + window.location.host;
 let targetId;
 
 $(document).ready(function () {
+    const auth = getToken();
 
-    showProduct();
+    if (auth !== undefined && auth !== '') {
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+            jqXHR.setRequestHeader('Authorization', auth);
+        });
+    } else {
+        window.location.href = host + '/api/user/login-page';
+        return;
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/user-info`,
+        contentType: 'application/json',
+    })
+        .done(function (res, status, xhr) {
+            const username = res.username;
+            const isAdmin = !!res.admin;
+
+            if (!username) {
+                window.location.href = '/api/user/login-page';
+                return;
+            }
+
+            $('#username').text(username);
+            if (isAdmin) {
+                $('#admin').text(true);
+                showProduct(true);
+            } else {
+                showProduct();
+            }
+        })
+        .fail(function (jqXHR, textStatus) {
+            logout();
+        });
 
     // id 가 query 인 녀석 위에서 엔터를 누르면 execSearch() 함수를 실행하라는 뜻입니다.
     $('#query').on('keypress', function (e) {
@@ -69,7 +103,7 @@ function execSearch() {
             }
         },
         error(error, status, request) {
-            console.error(error);
+            logout();
         }
     })
 
@@ -118,10 +152,11 @@ function addProduct(itemDto) {
             targetId = response.id;
         },
         error(error, status, request) {
-            console.log(error);
+            logout();
         }
     });
 }
+
 function showProduct(isAdmin = false) {
     /**
      * 관심상품 목록: #product-container
@@ -129,9 +164,18 @@ function showProduct(isAdmin = false) {
      * 관심상품 HTML 만드는 함수: addProductItem
      */
 
+    let dataSource = null;
+
+    // admin 계정
+    if (isAdmin) {
+        dataSource = `/api/admin/products`;
+    } else {
+        dataSource = `/api/products`;
+    }
+
     $.ajax({
         type: 'GET',
-        url: '/api/products',
+        url: dataSource,
         contentType: 'application/json',
         success: function (response) {
             $('#product-container').empty();
@@ -142,10 +186,13 @@ function showProduct(isAdmin = false) {
             }
         },
         error(error, status, request) {
-            console.log(error);
+            if (error.status === 403) {
+                $('html').html(error.responseText);
+                return;
+            }
+            logout();
         }
     });
-
 }
 
 function addProductItem(product) {
@@ -207,7 +254,23 @@ function setMyprice() {
             window.location.reload();
         },
         error(error, status, request) {
-            console.error(error);
+            logout();
         }
     })
+}
+
+function logout() {
+    // 토큰 삭제
+    Cookies.remove('Authorization', {path: '/'});
+    window.location.href = host + '/api/user/login-page';
+}
+
+function getToken() {
+    let auth = Cookies.get('Authorization');
+
+    if (auth === undefined) {
+        return '';
+    }
+
+    return auth;
 }
