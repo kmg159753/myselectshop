@@ -39,6 +39,28 @@
     </div>
 </div>
 <div id="see-area">
+    <div class="folder-bar folder-black">
+        <div>
+            <button id="folder-all" class="folder-bar-item folder-button product-folder folder-active" onclick="openFolder()">전체</button>
+        </div>
+        <div id="fragment">
+            <div th:each="folder : ${folders}">
+                <button class="folder-bar-item folder-button product-folder"
+                        th:value="${folder.id}"
+                        th:utext="${folder.name}"
+                        th:attr="onclick=|openFolder(${folder.id})|">
+                </button>
+            </div>
+        </div>
+        <div>
+            <button id="folder-add" class="folder-bar-item folder-button product-folder" onclick="openAddFolderPopup()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30px" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                    <path d="M.5 3l.04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                    <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
     <div class="pagination">
         정렬:
         <select id="sorting" onchange="showProduct()">
@@ -52,7 +74,26 @@
     <div id="pagination" class="pagination"></div>
     <br>
     <div id="product-container">
-
+    </div>
+    <div id="container2" class="popup-container">
+        <div class="popup" style="width:410px; height:auto">
+            <button id="close2" class="close">
+                X
+            </button>
+            <h1>🗂 폴더 추가하기</h1>
+            <p>폴더를 추가해서 관심상품을 관리해보세요!</p>
+            <div id="folders-input">
+                <input type="text" class="folderToAdd" placeholder="추가할 폴더명">
+                <!--                <div class="control" data-v-79d84978="" style="width:20px"><a class="button is-primary is-outlined" data-v-79d84978=""><span class="icon" data-v-79d84978=""><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" class="svg-inline&#45;&#45;fa fa-times fa-w-11" data-v-79d84978=""><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" data-v-79d84978="" class=""></path></svg></span></a></div>-->
+            </div>
+            <div onclick="addFolderInput()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30px" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                    <path d="M.5 3l.04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                    <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+            </div>
+            <button id="add-folder-btn" class="cta2" onclick="addFolder()">추가하기</button>
+        </div>
     </div>
 </div>
 <div id="search-area">
