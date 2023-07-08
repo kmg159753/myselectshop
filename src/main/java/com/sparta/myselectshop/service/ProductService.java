@@ -9,6 +9,7 @@ import com.sparta.myselectshop.entity.UserRoleEnum;
 import com.sparta.myselectshop.naver.dto.ItemDto;
 import com.sparta.myselectshop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +27,12 @@ public class ProductService {
     private final ProductRepository productRepository;
     public static final int MIN_MY_PRICE = 100;
 
+    @Transactional
     public ProductResponseDto createProduct(ProductRequestDto requestDto, User user) {
         Product product = productRepository.save(new Product(requestDto, user));
         return new ProductResponseDto(product);
+
+
     }
 
     @Transactional
@@ -59,6 +63,7 @@ public class ProductService {
 
 
 
+    @Transactional(readOnly = true)
     public Page<ProductResponseDto> getProducts(User user,
                                                 int page, int size,
                                                 String sortBy, boolean isAsc) {
